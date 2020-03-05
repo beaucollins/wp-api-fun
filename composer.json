@@ -1,0 +1,17 @@
+{
+    "name": "beaucollins/wp-api-fun",
+    "authors": [
+        {
+            "name": "Beau Collins",
+            "email": "beau@collins.pub"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "vimeo/psalm": "^3.9",
+        "php-stubs/wordpress-stubs": "^5.3"
+    },
+    "autoload": {
+        "files": ["src/fun.php"]
+    }
+}
