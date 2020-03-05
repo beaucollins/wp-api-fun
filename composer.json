@@ -6,6 +6,9 @@
             "email": "beau@collins.pub"
         }
     ],
+    "scripts": {
+        "check": "psalm"
+    },
     "require": {},
     "require-dev": {
         "vimeo/psalm": "^3.9",
