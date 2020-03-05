@@ -1,5 +1,6 @@
 {
     "name": "beaucollins/wp-api-fun",
+    "description": "Functional Programming patters with Type Safety",
     "authors": [
         {
             "name": "Beau Collins",
