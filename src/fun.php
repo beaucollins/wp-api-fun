@@ -8,7 +8,7 @@
  * @param WP_REST_Request $request
  * @return WP_REST_Response
  */
-function totally_not_buggy( $request ) {
+function totes_not_buggy( $request ) {
    return new WP_REST_Response( [ 'status' => 'not buggy' ] );
 }
 
@@ -23,6 +23,8 @@ function totes_register_api_endpoint( $path, $handler ) {
    ] );
 }
 
-add_action( 'rest_api_init', function() {
-   totes_register_api_endpoint('not-buggy', 'totally_not_buggy');
-} );
+if (function_exists('add_action')) {
+   add_action( 'rest_api_init', function() {
+      totes_register_api_endpoint('not-buggy', 'totally_not_buggy');
+   } );
+}
