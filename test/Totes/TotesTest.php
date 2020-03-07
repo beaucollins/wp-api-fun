@@ -2,6 +2,7 @@
 namespace Totes;
 
 use WP_REST_Request;
+use WP_REST_Server;
 
 class TotesTest extends \PHPUnit\Framework\TestCase {
 
@@ -9,8 +10,8 @@ class TotesTest extends \PHPUnit\Framework\TestCase {
 	 * @return void
 	 */
 	function testTotesNotBuggy() {
-		$request = new WP_REST_Request();
-		$response = totes_not_buggy( $request );
+		$request = new WP_REST_Request( 'GET', '/totes/not-buggy' );
+		$response = rest_get_server()->dispatch( $request );
 
 		$this->assertEquals( [ 'status' => 'not buggy' ], $response->get_data( ) );
 	}

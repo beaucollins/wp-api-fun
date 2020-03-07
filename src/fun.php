@@ -23,8 +23,13 @@ function totes_register_api_endpoint( $path, $handler ) {
    ] );
 }
 
-if (function_exists('add_action')) {
-   add_action( 'rest_api_init', function() {
-      totes_register_api_endpoint('not-buggy', 'totes_not_buggy');
-   } );
+/**
+ * @return void
+ */
+function totes_register_endpoints() {
+   totes_register_api_endpoint('not-buggy', 'totes_not_buggy');
+}
+
+if ( function_exists( 'add_action' ) ) {
+   add_action( 'rest_api_init', 'totes_register_endpoints' );
 }
