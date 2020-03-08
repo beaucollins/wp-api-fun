@@ -3,7 +3,7 @@
  * Plugin Name: Totes
  */
 /**
- * Responds to a REST request with text/plain "You did it!"
+ * Responds to a REST request with {"status": "not buggy"}
  *
  * @param WP_REST_Request $request
  * @return WP_REST_Response

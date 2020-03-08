@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "check": "psalm",
-        "test": "phpunit test"
+        "test": "phpunit"
     },
     "require": {},
     "require-dev": {
