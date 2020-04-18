@@ -40,3 +40,6 @@ jobs:
       with:
         report_path: ./psalm-report.json
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Unit Tests
+      run: composer test
