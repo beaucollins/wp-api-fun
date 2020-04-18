@@ -1,35 +1,48 @@
 <?php
 /**
- * Plugin Name: Totes
+ * Plugin Name: Fun
  */
-/**
- * Responds to a REST request with {"status": "not buggy"}
- *
- * @param WP_REST_Request $request
- * @return WP_REST_Response
- */
-function totes_not_buggy( $request ) {
-   return new WP_REST_Response( [ 'status' => 'not buggy' ] );
-}
+namespace Fun;
+
+use WP_REST_Response;
+use WP_REST_Request;
+use WP_Error;
 
 /**
- * @param string $path
- * @param (callable(WP_REST_Request):(WP_REST_Response|WP_Error|JSONSerializable)) $handler
- * @return void
+ * @template Requestor
+ * @param (callable(WP_REST_Request): (Requestor|WP_Error)) $get_requestor
+ * @return callable(WP_REST_Request): WP_REST_Response
  */
-function totes_register_api_endpoint( $path, $handler ) {
-   register_rest_route( 'totes', $path, [
-      'callback' => $handler
-   ] );
+function build_handler( $get_requestor ) {
+	return function( WP_REST_Request $request) use ( $get_requestor ): WP_REST_Response {
+		$requestor = $get_requestor( $request );
+		if ( $requestor instanceof WP_Error ) {
+			return wp_error_as_response( $requestor );
+		}
+		$resource = resource_for_request( $request, $requestor );
+		if ( ! requestor_can_perform( $request, $resource, $requestor ) ) {
+		   return new WP_REST_Response( ['error' => '$reason'], 403  );
+		}
+		$representation = perform_request_action( $request, $resource, $requestor );
+		return new WP_REST_Response( $representation );
+	};
 }
 
-/**
- * @return void
- */
-function totes_register_endpoints() {
-   totes_register_api_endpoint('not-buggy', 'totes_not_buggy');
-}
-
-if ( function_exists( 'add_action' ) ) {
-   add_action( 'rest_api_init', 'totes_register_endpoints' );
+function wp_error_as_response( WP_Error $error ): WP_REST_Response {
+	/**
+	 * @var mixed
+	 */
+	$data = $error->get_error_data();
+	if ( is_array( $data ) && array_key_exists( 'status', $data ) ) {
+		$status = (int) $data['status'];
+	} else {
+		$status = 500;
+	}
+	return new WP_REST_Response(
+		[
+			'code' => $error->get_error_code(),
+			'message' => $error->get_error_message()
+		],
+		$status
+	);
 }
