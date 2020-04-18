@@ -10,21 +10,36 @@ use WP_Error;
 
 /**
  * @template Requestor
+ * @template Resource
  * @param (callable(WP_REST_Request): (Requestor|WP_Error)) $get_requestor
+ * @param (callable(WP_REST_Request, Requestor): (Resource|WP_Error)) $get_resource
+ * @param (callable(WP_REST_Request, Resource, Requestor): (true|WP_Error)) $is_authorized
+ * @param (callable(WP_REST_Request, Resource, Requestor): (WP_REST_Response|WP_Error)) $action
  * @return callable(WP_REST_Request): WP_REST_Response
  */
-function build_handler( $get_requestor ) {
-	return function( WP_REST_Request $request) use ( $get_requestor ): WP_REST_Response {
+function build_handler( $get_requestor, $get_resource, $is_authorized, $action ) {
+	return function( WP_REST_Request $request) use ( $get_requestor, $get_resource, $is_authorized, $action ): WP_REST_Response {
 		$requestor = $get_requestor( $request );
 		if ( $requestor instanceof WP_Error ) {
 			return wp_error_as_response( $requestor );
 		}
-		$resource = resource_for_request( $request, $requestor );
-		if ( ! requestor_can_perform( $request, $resource, $requestor ) ) {
-		   return new WP_REST_Response( ['error' => '$reason'], 403  );
+
+		$resource = $get_resource( $request, $requestor );
+		if ( $resource instanceof WP_Error ) {
+			return wp_error_as_response( $resource );
 		}
-		$representation = perform_request_action( $request, $resource, $requestor );
-		return new WP_REST_Response( $representation );
+
+		$authorized = $is_authorized( $request, $resource, $requestor );
+		if ( $authorized instanceof WP_Error ) {
+			return wp_error_as_response( $authorized );
+		}
+
+		$representation = $action( $request, $resource, $requestor );
+		if ( $representation instanceof WP_Error ) {
+			return wp_error_as_response( $representation );
+		}
+
+		return $representation;
 	};
 }
 
