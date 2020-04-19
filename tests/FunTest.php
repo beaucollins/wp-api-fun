@@ -74,19 +74,19 @@ class FunTest extends \PHPUnit\Framework\TestCase {
 		$handler = build_handler(
 			fn(): FunTest\User => new FunTest\User,
 			fn(): FunTest\Resource => new FunTest\Resource(),
-			fn() => true,
 			/**
 			 * @param WP_REST_Request $request
 			 * @param FunTest\Resource $resource
 			 * @param FunTest\User $user
-			 * @return WP_REST_Response
 			 */
-			fn( $request, $resource, $user ) => new WP_REST_Response( ['status' => 'ok' ] )
+			fn( $request, $resource, $user ) => true,
+			'\Fun\FunTest\some_action'
 		);
 
 		$response = $handler( new WP_REST_Request() );
 
 		$this->assertEquals( WP_Http::OK, $response->get_status() );
+		$this->assertEquals( [ 'status' => 'ok' ], $response->get_data() );
 
 	}
 }
@@ -105,6 +105,24 @@ class User {
 
 }
 
+class Bot {
+
+}
+
 class Resource {
 
+}
+
+class OtherResource {
+
+}
+
+/**
+ * @param \WP_REST_Request $request
+ * @param OtherResource $resource
+ * @param User $user
+ * @return \WP_REST_Response
+ */
+function some_action( $request, $resource, $user ) {
+	return new \WP_REST_Response(  [ 'status' => 'ok' ] );
 }
