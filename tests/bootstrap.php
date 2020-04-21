@@ -10,6 +10,7 @@ require_once __DIR__ . '/../wordpress/wp-includes/class-wp-error.php';
 require_once __DIR__ . '/../wordpress/wp-includes/pomo/translations.php';
 require_once __DIR__ . '/../wordpress/wp-includes/l10n.php';
 require_once __DIR__ . '/../wordpress/wp-includes/class-wp-http-response.php';
+require_once __DIR__ . '/../wordpress/wp-includes/class-http.php';
 require_once __DIR__ . '/../wordpress/wp-includes/rest-api/class-wp-rest-request.php';
 require_once __DIR__ . '/../wordpress/wp-includes/rest-api/class-wp-rest-response.php';
 require_once __DIR__ . '/../wordpress/wp-includes/rest-api/class-wp-rest-server.php';

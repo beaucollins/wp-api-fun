@@ -13,13 +13,16 @@
     },
     "require": {},
     "require-dev": {
-        "vimeo/psalm": "^3.9",
+        "vimeo/psalm": "dev-master",
         "php-stubs/wordpress-stubs": "^5.3",
         "johnpbloch/wordpress": "^5.3",
         "psalm/plugin-phpunit": "^0.9.0",
         "phpunit/phpunit": "^9.0"
     },
-    "autoload": {
-        "files": ["src/fun.php"]
+    "autoload-dev": {
+        "files": [
+            "src/fun.php",
+            "src/totes.php"
+        ]
     }
 }
